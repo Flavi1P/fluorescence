@@ -1,0 +1,149 @@
+                                                                                                                        
+<ER>                                                                                                                    
+]                                                                                                                       
+]                                                                                                                       
+]                                                                                                                       
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+
+[Wed Dec 10 15:10:03.676 2014] ?PI
+[Wed Dec 10 15:10:03.848 2014] <Parameters loaded>
+[Wed Dec 10 15:10:03.879 2014] **********RUDICS PARAMETERS**********
+[Wed Dec 10 15:10:03.926 2014] 
+[Wed Dec 10 15:10:03.957 2014] Phone Number     : 00881600005210
+[Wed Dec 10 15:10:03.988 2014] Login            : lovbio081b
+[Wed Dec 10 15:10:03.988 2014] Password         : bioridium
+[Wed Dec 10 15:10:04.035 2014] Session timeout  : 180 minute(s)
+[Wed Dec 10 15:10:04.066 2014] Session interval : 4 hour(s)
+[Wed Dec 10 15:10:04.145 2014] Session retry    : 1
+[Wed Dec 10 15:10:04.145 2014] Base64 Encoding  : Yes
+[Wed Dec 10 15:10:04.145 2014] Full Autotest    : Yes
+[Wed Dec 10 15:10:04.224 2014] SBD Positioning Activation                     : No
+[Wed Dec 10 15:10:04.271 2014] Send SBD Positioning only on GPS default
+[Wed Dec 10 15:10:04.302 2014] (On GPS default=Yes, Send systematically = No) : No
+[Wed Dec 10 15:10:04.364 2014] 
+[Wed Dec 10 15:10:04.364 2014] <PI 0 00881600005210>
+[Wed Dec 10 15:10:04.364 2014] <PI 1 lovbio081b>
+[Wed Dec 10 15:10:04.411 2014] <PI 2 bioridium>
+[Wed Dec 10 15:10:04.442 2014] <PI 3 180>
+[Wed Dec 10 15:10:04.474 2014] <PI 4 4>
+[Wed Dec 10 15:10:04.474 2014] <PI 5 1>
+[Wed Dec 10 15:10:04.474 2014] <PI 6 1>
+[Wed Dec 10 15:10:04.505 2014] <PI 7 1>
+[Wed Dec 10 15:10:04.505 2014] <PI 8 0>
+[Wed Dec 10 15:10:04.505 2014] <PI 9 0>
+[Wed Dec 10 15:10:04.536 2014] ]?TI
+[Wed Dec 10 15:10:34.664 2014] 15:10:19 10/12/14
+[Wed Dec 10 15:10:34.664 2014] Get measure ?TI 
+[Wed Dec 10 15:10:34.758 2014] DATE/TIME Measure: 15:10:10 10/12/14
+[Wed Dec 10 15:10:34.805 2014] ]?ME 1
+[Wed Dec 10 15:11:04.840 2014] Get measure ?ME 
+[Wed Dec 10 15:11:09.498 2014] ONE SHOT Measure: 1 DO 43 1755 41.3560 7.9660 7.9340
+[Wed Dec 10 15:11:09.544 2014] ]?ME 1
+[Wed Dec 10 15:11:39.658 2014] Get measure ?ME 
+[Wed Dec 10 15:11:44.252 2014] ONE SHOT Measure: 1 DO 43 1755 41.3270 7.9490 7.8780
+[Wed Dec 10 15:11:44.314 2014] ]?ME 1
+[Wed Dec 10 15:12:14.412 2014] Get measure ?ME 
+[Wed Dec 10 15:12:19.038 2014] ONE SHOT Measure: 1 DO 43 1755 41.3260 7.9460 7.9110
+[Wed Dec 10 15:12:19.085 2014] ]?ME 1
+[Wed Dec 10 15:12:49.167 2014] Get measure ?ME 
+[Wed Dec 10 15:12:53.776 2014] ONE SHOT Measure: 1 DO 43 1755 41.3190 7.9450 7.9680
+[Wed Dec 10 15:12:53.855 2014] ]?ME 1
+[Wed Dec 10 15:13:23.925 2014] Get measure ?ME 
+[Wed Dec 10 15:13:28.566 2014] ONE SHOT Measure: 1 DO 43 1755 41.3260 7.9440 7.8600
+[Wed Dec 10 15:13:28.613 2014] ]?ME 1
+[Wed Dec 10 15:13:58.798 2014] Get measure ?ME 
+[Wed Dec 10 15:14:03.401 2014] ONE SHOT Measure: 1 DO 43 1755 41.3080 7.9440 7.9290
+[Wed Dec 10 15:14:03.448 2014] ]?ME 1
+[Wed Dec 10 15:14:33.588 2014] Get measure ?ME 
+[Wed Dec 10 15:14:38.173 2014] ONE SHOT Measure: 1 DO 43 1755 41.3260 7.9410 7.8450
+[Wed Dec 10 15:14:38.246 2014] ]?ME 1
+[Wed Dec 10 15:15:08.417 2014] Get measure ?ME 
+[Wed Dec 10 15:15:13.053 2014] ONE SHOT Measure: 1 DO 43 1755 41.3300 7.9370 7.8800
+[Wed Dec 10 15:15:13.084 2014] ]?ME 1
+[Wed Dec 10 15:15:43.180 2014] Get measure ?ME 
+[Wed Dec 10 15:15:47.823 2014] ONE SHOT Measure: 1 DO 43 1755 41.3250 7.9380 7.8880
+[Wed Dec 10 15:15:47.888 2014] ]?ME 1
+[Wed Dec 10 15:16:17.953 2014] Get measure ?ME 
+[Wed Dec 10 15:16:22.579 2014] ONE SHOT Measure: 1 DO 43 1755 41.3260 7.9380 7.9100
+[Wed Dec 10 15:16:22.657 2014] ]?ME 1
+[Wed Dec 10 15:16:52.755 2014] Get measure ?ME 
+[Wed Dec 10 15:16:57.380 2014] ONE SHOT Measure: 1 DO 43 1755 41.3180 7.9390 7.9450
+[Wed Dec 10 15:16:57.442 2014] ]?ME 1
+[Wed Dec 10 15:17:27.542 2014] Get measure ?ME 
+[Wed Dec 10 15:17:32.167 2014] ONE SHOT Measure: 1 DO 43 1755 41.2970 7.9370 8.0280
+[Wed Dec 10 15:17:32.230 2014] ]?ME 1
+[Wed Dec 10 15:18:02.328 2014] Get measure ?ME 
+[Wed Dec 10 15:18:06.953 2014] ONE SHOT Measure: 1 DO 43 1755 41.2930 7.9360 8.0130
+[Wed Dec 10 15:18:07.031 2014] ]?ME 1
+[Wed Dec 10 15:18:37.129 2014] Get measure ?ME 
+[Wed Dec 10 15:18:41.770 2014] ONE SHOT Measure: 1 DO 43 1755 41.2750 7.9360 8.0890
+[Wed Dec 10 15:18:41.801 2014] ]?ME 1
+[Wed Dec 10 15:19:11.881 2014] Get measure ?ME 
+[Wed Dec 10 15:19:16.504 2014] ONE SHOT Measure: 1 DO 43 1755 41.2990 7.9360 8.0460
+[Wed Dec 10 15:19:16.586 2014] ]?ME 1
+[Wed Dec 10 15:19:46.711 2014] Get measure ?ME 
+[Wed Dec 10 15:19:51.296 2014] ONE SHOT Measure: 1 DO 43 1755 41.3200 7.9370 7.9240
+[Wed Dec 10 15:19:51.374 2014] ]?ME 1
+[Wed Dec 10 15:20:21.471 2014] Get measure ?ME 
+[Wed Dec 10 15:20:26.097 2014] ONE SHOT Measure: 1 DO 43 1755 41.3270 7.9350 7.8710
+[Wed Dec 10 15:20:26.184 2014] ]?ME 1
+[Wed Dec 10 15:20:56.324 2014] Get measure ?ME 
+[Wed Dec 10 15:21:00.958 2014] ONE SHOT Measure: 1 DO 43 1755 41.3380 7.9310 7.8390
+[Wed Dec 10 15:21:01.005 2014] ]?ME 1
+[Wed Dec 10 15:21:31.143 2014] Get measure ?ME 
+[Wed Dec 10 15:21:35.779 2014] ONE SHOT Measure: 1 DO 43 1755 41.3590 7.9350 7.7750
+[Wed Dec 10 15:21:35.842 2014] ]

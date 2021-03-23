@@ -1,0 +1,4 @@
+AuthName "Page BD FLOAT - Donnees in situ"
+AuthType Basic
+AuthUserFile "/data/data-oao/DEPLOYMENT/IN_SITU/.htpasswd"
+Require valid-user

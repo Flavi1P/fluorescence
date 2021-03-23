@@ -1,0 +1,63 @@
+****************************************************************************************
+* Origine: 
+* Laboratoire d'Oceanographie de Villefranche (LOV)
+* Adresse: BP 8 - Quai de la Darse - F06238 Villefranche-sur-Mer cedex
+* Tel/Fax: (33) 04 93 76 37 27 / (33) 04 93 76 38 73
+* Internet: antoine@obs-vlfr.fr ; obolensky@obs-vlfr.fr
+* Responsable scientifique: David Antoine, Charge de Recherches au CNRS
+* Responsable traitement des donnees: Grigor Obolensky, Ingenieur d'etudes au CNRS
+*
+* Nom du projet: 
+* BOUSSOLE (Programme conjoint ESA-CNES-NASA-INSU)
+* Objectifs: 
+* Etablissement d'une serie temporelle a long terme des proprietes optiques apparentes
+* et inherentes en mer Ligure (N 43 deg 22, E 7 deg 54), en particulier en vue des 
+* operations de calibration et de validation des capteurs satellitaires de la couleur
+* de l'ocean (instruments MERIS de l'ESA et POLDER-2 du CNES en particulier).
+*****************************************************************************************
+* Equipement utilise : 
+* sonde CTD SEABIRD SBE 911plus, numero de serie : 0329
+* capteur de temperature SEABIRD SBE 3, numero de serie : 1378 
+* capteur de conductivite SEABIRD SBE 4, numero de serie : 2929
+* capteur de pression Paroscientific, numero de serie : 53981
+* capteur d'oxygene SEABIRD SBE 43, numero de serie : 0378
+* Fluorimetre CHELSEA AquaTracka, numero de serie : 088193
+* Transmissometre Wetlabs CStar, 660 nm, numero de serie : 887DR
+*
+* Calibrations :
+* Temperature : Seabird, 09-Jan-13.
+* Conductivite : Seabird, 09-Jan-13.
+* Pression : Seabird, 04-Dec-09. Offset estime < 1 dbar
+* Oxygene : Seabird, 19-Jun-12. Precision initiale = 2% de la valeur de saturation
+* Fluorimetre Chelsea : 27-Oct-97
+* Transmissometre Wetlabs Cstar : 17-Feb-12
+******************************************************************************************
+* Unites:
+* Pression : [dbar]
+* Temperature : ITS-90 [deg C]
+* Temperature potentielle : ITS-90 [deg C]
+* Salinite : PSS-78 [sans unite]
+* Exces de masse volumique : [kg/m3]
+* Oxygene : [ml/l] et [micromole/kg] 
+* Fluorescence : signal en Volts et [unite relative]
+* Transmissomètre : signal en Volts, [%] et [m-1]
+******************************************************************************************
+* Campagne = BOUSSOLE 137
+* Navire = Tethys II
+* Station = BOUS010
+* Date = 15/07/2013
+* Heure debut [TU] = 13:14
+* Heure fin [TU] = 13:28
+* Heure locale / TU = +2
+* Latitude = 43 22.229 N
+* Longitude = 007 54.258 E
+* Heure meteo [TU] = 13:33
+* T air sec [deg C] = 27.1
+* T mer [deg C] = 24.88
+* Vent [noeuds, degres] = 6,180
+* Pression atm [hpa] = 1017.9
+* Humidite [%] = 63
+* Nebulosite [octas] = 6
+* Etat de la mer [code S] = 2
+************************************************************
+
