@@ -337,17 +337,41 @@ data_long$concentration <- as.numeric(data_long$concentration)
 data_long$concentration[data_long$concentration < 0] <- NA
 
 
-date_diff <- grep('^([0-9]{4}\\-(0?[1-9]|1[0-2])\\-(0?[1-9]|[1-2][0-9]|3[0-1]))$', data_long$date)
 
-date_num <- data_long$date[grep('^[0-9]{5}$', data_long$date)]
-date_ok <-  data_long$date[grep('^([0-9]{4}\\-(0?[1-9]|1[0-2])\\-(0?[1-9]|[1-2][0-9]|3[0-1]))$', data_long$date)]
+date_num <- data_large$date[grep('^[0-9]{5}$', data_large$date)]
+
+
+dates <- unique(data_large$date)
+
+date_ok <-  data_large$date[grep('^([0-9]{4}\\-(0?[1-9]|1[0-2])\\-(0?[1-9]|[1-2][0-9]|3[0-1]))$', data_large$date)]
 
 date_ok <- as_date(date_ok)
+date_ok <- unique(date_ok)
 
 date_num_date <- as.Date(as.numeric(date_num), origin = '1899-10-31')
+data_large$date[grep('^[0-9]{5}$', data_large$date)] <- as.character(date_num_date)
 
 
-other_format <- unique(data_long$date[-date_diff])
 
-max(date_num)
+other_format <- unique(data_large$date[-grep('^([0-9]{4}\\-(0?[1-9]|1[0-2])\\-(0?[1-9]|[1-2][0-9]|3[0-1]))$', data_large$date)])
+convert_df <- data.frame('good_date' = c("2001-07-21", '2013-02-13', '2014-06-15', '2014-06-09'),
+                         'bad_date' = c("24/7/2001", "13/0/2013", "15/06/2014", "09/06/2014"))
+other_format <- (data_large$date[-grep('^([0-9]{4}\\-(0?[1-9]|1[0-2])\\-(0?[1-9]|[1-2][0-9]|3[0-1]))$', data_large$date)])
+
+df_to_convert <- data.frame('bad_date' = other_format)
+df_date <- left_join(df_to_convert, convert_df)
+
+data_large$date[-grep('^([0-9]{4}\\-(0?[1-9]|1[0-2])\\-(0?[1-9]|[1-2][0-9]|3[0-1]))$', data_large$date)] <- as.character(df_date$good_date)
+
+data_large$date <- as.Date(data_large$date)
+
+ggplot(data_large)+
+  geom_density(aes(x = date))
+
+world_map <- map_data('world')
+
+ggplot()+
+  geom_polygon(aes(x = long, y = lat, group = group), data = world_map)+
+  geom_point(aes(x = lon, y = lat, colour = cruise_name), data = data_large)+
+  coord_quickmap()
 
