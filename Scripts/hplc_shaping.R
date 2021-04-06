@@ -324,6 +324,8 @@ for (i in 1:length(cruises_data$path)){
   
 }
 
+data_large <- distinct(data_large) %>% mutate(id_row = seq(1:nrow(.)))
+
 data_long <- data_large %>% pivot_longer(chl_c1_c2:t_chla, names_to = 'pigment', values_to = 'concentration')
 
 data_long$concentration <- tolower(data_long$concentration)
@@ -336,6 +338,8 @@ data_long$concentration <- as.numeric(data_long$concentration)
 
 data_long$concentration[data_long$concentration < 0] <- NA
 
+
+data_large <- pivot_wider(data_long, names_from = 'pigment', values_from = 'concentration')
 
 
 date_num <- data_large$date[grep('^[0-9]{5}$', data_large$date)]
@@ -374,4 +378,9 @@ ggplot()+
   geom_polygon(aes(x = long, y = lat, group = group), data = world_map)+
   geom_point(aes(x = lon, y = lat, colour = cruise_name), data = data_large)+
   coord_quickmap()
+
+ggplot(data_large)+
+  geom_point(aes(x = t_chla, y = zea))
+
+write_csv(data_large, "Data/hplc_argo_campaign")
 
