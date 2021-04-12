@@ -38,6 +38,7 @@ for(i in ref_name$path){
   if(file.exists(i)){
     print(paste(i, "exists", sep = " "))
     vars <- index_bio %>% filter(number == str_extract(i, '[0-9]{6,}')) %>% pull(parameters) %>% str_split(" ") %>% unlist() %>% unique()
+    vars <- append(vars, "CHLA_ADJUSTED")
     table <- extract_sd(i, vars = vars)
   } else{
     print(paste(i, "doesn't exists", sep = " "))
