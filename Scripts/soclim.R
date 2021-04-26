@@ -1,10 +1,16 @@
 library(tidyverse)
 library(ncdf4)
+library(readxl)
 library(sf)
+library(oce)
+library(metR)
 
-soclim <- read_delim("Data/soclim/soclim_btl_V9.txt", 
-           "\t", escape_double = FALSE, trim_ws = TRUE)
-soclim <- janitor::clean_names(soclim[, c(1:103)])
+# soclim <- read_delim("Data/soclim/soclim_btl_V9.txt", 
+#            "\t", escape_double = FALSE, trim_ws = TRUE)
+# soclim <- janitor::clean_names(soclim[, c(1:103)])
+
+
+soclim <- read_csv("Data/soclim_abs.csv")
 
 soclim <- soclim %>% mutate(cast_id = paste(station, ctd_number))
 
@@ -22,10 +28,11 @@ ggplot(soclim)+
 soclim_ratio <- soclim %>% na.omit() %>%
   mutate(relativ_chl = total_chlorophyll_a/max(total_chlorophyll_a),
                                   ratio = fluorescence_eco_rfu*2.5/total_chlorophyll_a,
-                                  relativ_ratio = fluorescence_eco_rfu/relativ_chl) %>% 
+                                  relativ_ratio = fluorescence_eco_rfu/relativ_chl,
+         yield = fluorescence_eco_rfu/pur470) %>% 
   filter(depth_m < 100) %>% 
   group_by(cast_id) %>% 
-  select(cast_id, "lon" = longitude_deg_east, "lat" = latitude_deg_north, relativ_chl, ratio, relativ_ratio, total_chlorophyll_a, fluorescence_eco_rfu) %>% 
+  select(cast_id, "lon" = longitude_deg_east, "lat" = latitude_deg_north, relativ_chl, ratio, relativ_ratio, total_chlorophyll_a, fluorescence_eco_rfu, yield) %>% 
   summarise_all(mean, na.omit = TRUE)
 
 worldmap <- map_data("world") %>% filter(long > min(soclim_ratio$lon) & long < max(soclim_ratio$lon) & lat < max(soclim_ratio$lat) & lat > min(soclim_ratio$lat))
@@ -61,7 +68,8 @@ ggplot(soclim_plot)+
 
 soclim_dist <- soclim %>% filter(fluorescence_eco_rfu > 0) %>%
   mutate(log_chla = log(total_chlorophyll_a),
-                            log_eco = log(fluorescence_eco_rfu))
+                            log_eco = log(fluorescence_eco_rfu),
+         yield = fluorescence_eco_rfu/pur470)
 ggplot(soclim_dist)+
   geom_density(aes(x = log_chla), colour = "Brown")+
   geom_density(aes(x = log_eco), colour = "Grey")+
@@ -106,6 +114,26 @@ ggplot(filter(soclim_dist_clean, group == "high"))+
   ylim(-200,0)+
   facet_wrap(.~cast_id)
 
+ggplot(soclim_dist_clean)+
+  geom_point(aes(x = eco_test, y = - depth_m, colour = group))+
+  geom_point(aes(x = total_chlorophyll_a, y = -depth_m), colour = "Green")+
+  ylim(-200,0)+
+  facet_wrap(.~cast_id, scales = 'free_x')
+
+ggplot(soclim_dist_clean)+
+  geom_point(aes(x = yield, y =  -depth_m, colour = group))+
+  ylim(-200,0)+
+  facet_wrap(.~cast_id)
+
+ggplot(soclim_dist_clean)+
+  geom_violin(aes(x = group, y = yield))+
+  geom_jitter(aes(x = group, y = yield))+
+  theme_bw()
+  
+ggplot(soclim_dist_clean)+
+  geom_violin(aes(x = group, y = ratio))+
+  geom_jitter(aes(x = group, y = ratio))+
+  theme_bw()
 
 nc_path <- c("Data/soclim/current.nc")
 
@@ -132,26 +160,52 @@ current_df <- left_join(north_df, east_df) %>%
   mutate(vel = sqrt(north^2+east^2),
          lat = as.numeric(lat))
 
-subset_df <- current_df %>% filter(lon > 50 & lon < 73 & lat < -20 & lat > -58)
+subset_df <- current_df %>% filter(lon > 50 & lon < 80 & lat < -25 & lat > -60)
 
 mean_df <- subset_df %>% mutate(lon_ron = round(lon),
                                 lat_ron = round(lat)) %>% 
   group_by(lon_ron, lat_ron) %>% 
   summarise_all(mean)
 
-ggplot(mean_df)+
-  geom_raster(data = subset_df, aes(x = lon, y = lat, fill = vel), interpolate = TRUE)+
-  geom_segment(aes(x = lon, xend = lon + east/1.2, y = lat, yend = lat+north/1.2), 
-               arrow = arrow(angle = 20, length = unit(.2, "cm"), type = "open"))+
-  geom_polygon(aes(x = long, y = lat), data = worldmap, fill = "Brown")+
-  scale_fill_gradientn(name = "Speed\n(m/s)",colours = oce::oceColorsVelocity(120), 
-                       limits = c(0,1.6), breaks =seq(0.1,1.6,.3))+
+# ggplot(mean_df)+
+#   geom_raster(data = subset_df, aes(x = lon, y = lat, fill = vel), interpolate = TRUE)+
+#   geom_segment(aes(x = lon, xend = lon + east/1.2, y = lat, yend = lat+north/1.2), 
+#                arrow = arrow(angle = 20, length = unit(.2, "cm"), type = "open"))+
+#   geom_polygon(aes(x = long, y = lat), data = worldmap, fill = "Brown")+
+#   scale_fill_gradientn(name = "Speed\n(m/s)",colours = oce::oceColorsVelocity(120), 
+  #                      limits = c(0,1.6), breaks =seq(0.1,1.6,.3))+
+  # geom_point(aes(x = longitude_deg_east, y = latitude_deg_north, colour = group), data =soclim_dist_clean)+
+  # theme_bw()+
+  # theme(legend.position = "right",
+  #       legend.key.height = unit(1.4, "cm"), 
+  #       legend.background = element_blank(),
+  #       axis.text = element_text(size = 12, colour = 1))+
+  # labs(x = "", y = "")+
+  # ggtitle("Current velocity near KI in October 2016")+
+  # coord_quickmap()
+
+ggplot() +
+  metR::geom_contour_fill(data = subset_df, aes(x = lon, y = lat, z = vel), na.fill = TRUE, bins = 70) + 
+  metR::geom_vector(data = mean_df, aes(x = lon, y = lat, dx = east, dy = north), 
+                    arrow.angle = 30, arrow.type = "open", arrow.length = .5, 
+                    pivot = 0,preserve.dir = TRUE, direction = "ccw")+
+  geom_polygon(aes(x = long, y = lat), data = worldmap, fill = "Grey")+
   geom_point(aes(x = longitude_deg_east, y = latitude_deg_north, colour = group), data =soclim_dist_clean)+
+  scale_fill_gradientn(name = "Speed\n(m/s)",colours = oceColorsVelocity(120), 
+                       limits = c(0,1.5), breaks =seq(0.1,1.6,.3))+
   theme_bw()+
   theme(legend.position = "right",
-        legend.key.height = unit(1.4, "cm"), 
+        legend.key.height = unit(1.2, "cm"), 
         legend.background = element_blank(),
         axis.text = element_text(size = 12, colour = 1))+
+  scale_mag(max = 1, name = "Speed", max_size = 0.5)+
+  scale_colour_brewer(palette = "Dark2")+
   labs(x = "", y = "")+
-  ggtitle("Current velocity near KI in October 2016")+
   coord_quickmap()
+
+
+
+
+
+
+
