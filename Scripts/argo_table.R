@@ -15,10 +15,9 @@ index_bio <- index_synth %>% separate(file, c('dac', 'number', 'prof', 'path'), 
 
 
 ref1 <- read_csv("Data/ref.csv")
-refbis <- data.frame("number" = c(6902737, 6902739, 6902735, 6902742, 6902743, 6902880), "lovbio" = c("lovbio103c", "lovbio107c", "lovbio100c", "lovapm002a", "lovapm004a", "lovbio111b"))
+refbis <- data.frame("number" = c(6902737, 6902739, 6902735, 6902742, 6902743, 6902880, 6902734, 6902736, 6902738), "lovbio" = c("lovbio103c", "lovbio107c", "lovbio100c", "lovapm002a", "lovapm004a", "lovbio111b", "lovbio098c", "lovbio101c", "lovbio104c"))
 refbis$lovbio <- as.character(refbis$lovbio)
 ref <- bind_rows(ref1, refbis)
-ref <- filter(ref, number != 6901526)
 
 index_bio$number <- as.numeric(index_bio$number)
 
@@ -28,6 +27,8 @@ basepath <- "~/oao2016/admt/GDAC"
 
 ref_name <- ref_name %>%
   mutate(path = paste(basepath, dac, number, 'profiles', paste('SD', number, '_001.nc', sep = ''), sep = '/'))
+
+write_csv(ref_name, "Data/ref_path_argo.csv")
 
 final_table <- data.frame("depth" = numeric(),
                           "date" = as.Date(x = integer(0), origin = "1970-01-01"),
@@ -40,6 +41,11 @@ for(i in ref_name$path){
     vars <- index_bio %>% filter(number == str_extract(i, '[0-9]{6,}')) %>% pull(parameters) %>% str_split(" ") %>% unlist() %>% unique()
     vars <- append(vars, "CHLA_ADJUSTED")
     table <- extract_sd(i, vars = vars)
+    if(nrow(table) < 200){
+      i <- str_replace(i, "001.nc", "002.nc")
+      print(paste(i, "has been used", sep = " "))
+      table <- extract_sd(i, vars = vars)
+    }
   } else{
     print(paste(i, "doesn't exists", sep = " "))
     break()}

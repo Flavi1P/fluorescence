@@ -74,7 +74,8 @@ for (i in 1:length(cruises_data$path)){
       year <- select(data, matches('year'))
       month <- select(data, matches('month'))
       day <- select(data, matches('day'))
-      date <- paste(day[[1]], month[[1]], year[[1]], sep = '/')
+      date <- paste(year[[1]], month[[1]], day[[1]], sep = '-')
+      date <- data.frame("date" = date)
     }
   }
   
