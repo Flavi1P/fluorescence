@@ -11,6 +11,7 @@ library(cowplot)
 library(broom)
 library(lmodel2)
 library(patchwork)
+library(RColorBrewer)
 
 #open datas
 path <- "Data/Longhurst"
@@ -45,6 +46,15 @@ argo$code[argo$code=="character(0)"] <- "BPLR"
 argo <- argo %>% mutate(code = case_when(code == "MEDI" & lon > 18 ~ "EMED",
                                          code == "MEDI" & lon <= 18 ~ "WMED",
                                          code != "EMED" & code != "WMED" ~ code)) #split the med sea in two regions
+
+#Create a custom color scale
+polarcolor <- brewer.pal(4,"PuBu")
+medcolor <- brewer.pal(4, "Greens")[c(3,4)]
+equatcolor <- brewer.pal(3, "OrRd")[c(2,3)]
+
+myColors <- c(polarcolor, medcolor, equatcolor)
+
+names(myColors) <- c("SANT", "ARCT", "ANTA", "BPLR", "EMED", "WMED", "SPSG", "ARCH")
 
 #create a df with the fluorescence value and raw ratio
 argo_new <- argo %>% mutate(fluo_biased = fluo *2, ratio = fluo_biased/t_chla) %>% 
@@ -87,7 +97,7 @@ g1 <- ggplot(filter(argo_new))+
   xlab("Longitude (°E)")+
   ylab("Latitude (°N)")+
   theme_bw(base_size = 18)+
-  scale_fill_brewer(palette = 'Set1')+
+  scale_fill_manual(name = "code",values = myColors)+
   coord_quickmap()
 
 region_argo$code <- as.character(region_argo$code)
@@ -124,14 +134,22 @@ ggplot(filter(argo_new, code == "SANT"))+
   scale_colour_brewer(palette = "Set1")
 
 
-gslope <- ggplot(fitted_slope)+
-  geom_bar(aes(y = estimate, x = reorder(code, estimate), fill = code), stat = "identity")+
-  geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error, x = reorder(code, estimate)))+
-  scale_fill_brewer(palette = "Set1", guide = FALSE)+
-  theme_bw(base_size = 18)+
-  ylab("Slope Factor")+
+fitted_slope$code <- factor(fitted_slope$code, levels = c("ANTA", "SANT", "ARCT", "BPLR", "EMED", "WMED", "SPSG", "ARCH"))
+
+
+gslope <-ggplot(fitted_slope)+
+  geom_bar(aes(y = estimate, x = code, fill = code), stat = "identity")+
+  geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error, x = code))+
+  scale_fill_manual(name = "code",values = myColors, guide = "none")+
+  theme_bw()+
+  ylab("Slope factor")+
   xlab("Oceanic province")+
-  ggtitle("Slope factor")
+  ggtitle("Slope factor") +
+  geom_vline(xintercept = c(4.5, 6.5)) +
+  annotate(geom = 'text', x = 2.5, y = 3, label = 'Polar') +
+  annotate(geom = 'text', x = 5.5, y = 3, label = 'Temperate') +
+  annotate(geom = 'text', x = 7.5, y = 3, label = 'Equatorial')
+
 
 g1/ gslope +
   plot_layout(guide = "collect", height = c(1,2))
