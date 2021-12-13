@@ -2,6 +2,15 @@ library(ggtern)
 
 argo <- read_csv("Output/Data/argo_matchup.csv")
 
+#Create a custom color scale
+polarcolor <- brewer.pal(4,"PuBu")
+medcolor <- brewer.pal(4, "Greens")[c(3,4)]
+equatcolor <- brewer.pal(3, "OrRd")[c(2,3)]
+
+myColors <- c(polarcolor, medcolor, equatcolor)
+
+names(myColors) <- c("SANT", "ARCT", "ANTA", "BPLR", "EMED", "WMED", "SPSG", "ARCH")
+
 argo <- argo %>% mutate(wdp = 1.56 * fuco + 0.92 * peri + 4.8 * allo + 1.02 * but + 1.12 * hex + 1.51 * zea + 0.69 * chlb,
                         micro = (1.56 * fuco + 0.92 * peri)/wdp,
                         nano = (4.8 * allo + 1.02 * but + 1.51 * hex)/wdp,
@@ -25,9 +34,9 @@ ggtern(data = argo, aes(pico, nano, micro, value = ratio))+
                         )+
   geom_point(aes(colour = code))+
   scale_fill_gradient(low= "#ffffcc", high = "#41b6c4", name = parse(text = "Chla^fluo/Chla^HPLC"))+
-  scale_color_brewer(palette = "Set1", name = "Bioregion")
+  scale_colour_manual(name = "code",values = myColors)
 
-ggsave("Output/paper_fig/ggtern.png", width = 10, height = 10)  
+ggsave("Output/paper_fig/ggtern.png", width = 10, height = 10)
 
 
 
