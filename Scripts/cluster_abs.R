@@ -11,7 +11,7 @@ map_vec <- read_csv('Data/map_vec')
 
 #lov <- read_excel("Dataset_LOV.xls", na = "NA") %>% clean_names()
 types <- c('c', 'c', 'T', rep('n', 186))
-lov <- read_csv('Data/absorbtion/lov_soclim_peacetime', col_types = as.list(types))
+lov <- read_csv('Data/absorption/lov_soclim_peacetime', col_types = as.list(types))
 
 
 # lov_nested <- lov %>% nest(pigments = c(chla : tot_car), aph = c(x400 : x700)) %>% 
@@ -28,7 +28,7 @@ lov <- read_csv('Data/absorbtion/lov_soclim_peacetime', col_types = as.list(type
 #lov_nested$plot_aph[[25]] + lov_nested$plot_aph[[26]]
 
 #open pigment absorption in solution data
-spectre <- read_excel("Biosope/Data/Spectres_annick.xlsx")
+spectre <- read_excel("Data/Spectres_annick.xlsx")
 spectre <- clean_names(spectre)
 
 #create a vector with all pigments names
@@ -275,7 +275,7 @@ g4 <- ggplot(tplot3, aes(area = concentration, fill = size, subgroup = size, lab
 g1
 g1 /(g2 | g3 | g4)
 
-#write_csv(lov_afc, 'Data/lov_afc')
+#write_csv(lov_afc, 'Data/lov_afc2')
 
 # lov_afc %>% select(ratio_440_470, real_440_470) %>% 
 #   pivot_longer(c(1,2), names_to = 'ratio', values_to = 'value') %>% 
