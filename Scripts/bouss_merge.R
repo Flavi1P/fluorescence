@@ -99,7 +99,7 @@ ggplot()+
   ylab("Normalized excitation")+
   xlab("Wavelength")
 
-ggsave("Output/paper_fig/excitation.png", height = 5, width = 10)
+#ggsave("Output/paper_fig/excitation.png", height = 5, width = 10)
 
 boussole_long <- test %>% janitor::clean_names() %>% mutate(row_id = c(1:nrow(test))) %>% select(row_id, x400:x520) %>%
   pivot_longer(x400:x520, names_to = 'wl', values_to = 'abs') %>% 
@@ -168,26 +168,30 @@ yield_abs <- tibble("depth2" = fitted_abs$depth2,
 
 yield_abs$depth2 <- factor(yield_abs$depth2, c("80", "70", "60", "50", "40", "30", "20", "10", "5"))
 
+yname <- expression(atop("Chla specific absorption at 470 nm"~(m^-2%.%"(mg"%.%"chla)"^{"-1"})))
+
 ggplot(yield_abs)+
   geom_bar(aes(y = abs, x = depth2, fill = depth2), stat = "identity")+
   geom_errorbar(aes(ymin = abs - abs_sd, ymax = abs + abs_sd, x = depth2))+
   coord_flip()+
-  scale_fill_brewer(palette = "Paired", direction = -1, guide = FALSE)+
+  scale_fill_brewer(palette = "Paired", direction = -1, guide = "none")+
   facet_wrap(.~season, nrow = 1)+
-  ylab("Specific Absorption at 470nm")+
-  xlab("Depth")+
-  theme_bw(base_size = 14)+
+  ylab(yname)+
+  xlab("Depth (m)")+
+  theme_bw(base_size = 16)+
   ylim(0,0.07)
 
-#ggsave("Output/paper_fig/specific_abs_bouss.png", width = 10, height = 5)
+#
+
+yname2 <- expression(atop("Chla specific photosynthetic absorption at 470 nm"~(m^-2%.%"(mg"%.%"chla)"^{"-1"})))
 
 ggplot(yield_abs)+
   geom_bar(aes(y = ps, x = depth2, fill = depth2), stat = "identity")+
   geom_errorbar(aes(ymin = ps - ps_sd, ymax = ps + ps_sd, x = depth2))+
   coord_flip()+
-  scale_fill_brewer(palette = "Paired", direction = -1, guide = FALSE)+
+  scale_fill_brewer(palette = "Paired", direction = -1, guide = "none")+
   facet_wrap(.~season, nrow = 1)+
-  ylab("Photosynthetic Absorption at 470nm")+
+  ylab(yname2)+
   xlab("Depth")+
   theme_bw(base_size = 14)+
   ylim(0,0.07)
@@ -197,15 +201,14 @@ ggplot(yield_abs)+
 ggplot(yield_abs)+
   geom_bar(aes(y = yield, x = depth2, fill = depth2), stat = "identity")+
   geom_errorbar(aes(x = depth2, ymin = yield - yield_sd, ymax = yield + yield_sd))+
-  scale_fill_brewer(palette = "Paired", direction = -1, guide = FALSE)+
-  xlab("Depth")+
-  ylab("Quantum Yield")+
+  scale_fill_brewer(palette = "Paired", direction = -1, guide = "none")+
+  xlab("Depth (m)")+
+  ylab("Quantum Yield of fluorescence (RFU.m²)")+
   coord_flip()+
   facet_wrap(.~season, nrow = 1)+
-  theme_bw()+
-  plot_layout(nrow = 2)
+  theme_bw(base_size = 14)
 
-#ggsave("Output/paper_fig/yield_abs.png", width = 8, height = 5)
+#ggsave("Output/paper_fig/yield_abs.png", width = 8, height = 4)
 
 ggplot(yield_abs)+
   geom_bar(aes(y = slope, x = depth2, fill = depth2), stat = "identity")+

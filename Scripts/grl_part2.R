@@ -163,23 +163,29 @@ ggplot(filter(fitted_models, code != "NASE" & code != "NADR" & code != "SSTC" & 
   scale_fill_manual(values = mycolors)+
   theme_minimal()
 
-gmap <- ggplot(filter(lov_map, code != "NASE" & code != "NADR" & code != "SSTC" & code != "CNRY"))+
+gmap <- ggplot(lov_map)+
   geom_point(aes(x = lon, y = lat, fill = code), size = 3, shape = 21)+
   geom_polygon(data = map_vec, aes(x = long, y = lat, group = group))+
   coord_quickmap()+
+  xlab("Longitude (°E)")+
+  ylab("Latitude (°N)")+
   scale_fill_manual(values = mycolors)+
-  theme_bw(base_size = 18)
+  theme_bw(base_size = 16)
+
+yname <- expression(atop("Chla specific absorption at 470 nm",~(m^-2%.%"(mg"%.%"chla)"^{"-1"})))
 
 gmap/
-  ggplot(filter(fitted_models_470, code != "NASE" & code != "NADR" & code != "SSTC" & code != "CNRY"))+
+  ggplot(fitted_models_470)+
   geom_histogram(aes(x = reorder(code, estimate), y = estimate, fill = code), stat = 'identity')+
   geom_errorbar(aes(x = reorder(code, estimate), ymin = estimate - std.error, ymax = estimate + std.error))+
-  ylab('Specific absorption')+
+  ylab(yname)+
   xlab('Oceanic province')+
-  scale_fill_manual(values = mycolors, guide = FALSE)+
-  theme_bw(base_size = 18)
+  scale_fill_manual(values = mycolors, guide = "none")+
+  theme_bw(base_size = 16)+
+  theme(axis.text.x=element_text(angle=45, hjust=1))+
+  plot_layout(guide = "collect", widths = 30)
 
-ggsave("Output/paper_fig/global_specific_abs.png", width = 10, height = 8)
+ggsave("Output/paper_fig/global_specific_abs.png", width = 9, height = 9)
 
 
 gmap/

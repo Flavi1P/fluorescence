@@ -54,31 +54,34 @@ ggplot(result_acp)+
   scale_colour_brewer(palette = "Paired", name = "Depth (m)")+
   geom_segment(aes(x = 0, y = 0, xend = Dim.1*2.7, yend = Dim.2*2.7), data = var_coord)+
   geom_segment(aes(x = 0, y = 0, xend = Dim.1*3, yend = Dim.2*3), colour = "red", data = supp_coord)+
-  geom_text(aes(x = Dim.1*3, y = Dim.2*3, label = rownames(var_coord)), data = var_coord, size = 6)+
-  geom_text(aes(x = Dim.1*3.2, y = Dim.2*3.2, label = rownames(supp_coord)), colour = "red", data = supp_coord, size = 6)+
+  geom_text_repel(aes(x = Dim.1*3, y = Dim.2*3, label = rownames(var_coord)), data = var_coord, size = 6)+
+  geom_text_repel(aes(x = Dim.1*3.2, y = Dim.2*3.2, label = rownames(supp_coord)), colour = "red", data = supp_coord, size = 6)+
   geom_label(aes(x = Dim.1, y = Dim.2, label = season), data = seasons_label)+
   ylab("PC2 (18,9%)")+
   xlab("PC1 (28,7%)")+
   xlim(-3, 3)+
   theme_bw(base_size = 16)
 
-ggsave("Output/paper_fig/acp_bouss.png", width = 7, height = 6)
+ggsave("Output/paper_fig/acp_bouss.png", width = 9, height = 6)
 
-result_acp <- left_join(result_acp, yield_abs)
+colorname <- expression(atop(a[470]^{"*"},(m^-2%.%"(mg"%.%"chla)"^{"-1"})))
+astar <- expression(a[470]^{"*"})
+aunit <- expression((m^-2%.%"(mg"%.%"chla)"^{"-1"}))
 ggplot(result_acp)+
   geom_point(aes(x = Dim.1, y = Dim.2, colour = abs))+
-  scale_colour_viridis_c(name = "a*")+
-  geom_segment(aes(x = 0, y = 0, xend = Dim.1*3, yend = Dim.2*3), data = var_coord)+
+  scale_colour_viridis_c(name = colorname)+
+  geom_segment(aes(x = 0, y = 0, xend = Dim.1*2.7, yend = Dim.2*2.7), data = var_coord)+
   geom_segment(aes(x = 0, y = 0, xend = Dim.1*3, yend = Dim.2*3), colour = "red", data = supp_coord)+
-  geom_text(aes(x = Dim.1*3.2, y = Dim.2*3.2, label = rownames(var_coord)), data = var_coord)+
+  geom_text(aes(x = Dim.1*3, y = Dim.2*3, label = rownames(var_coord)), data = var_coord)+
   geom_text(aes(x = Dim.1*3.2, y = Dim.2*3.2, label = rownames(supp_coord)), colour = "red", data = supp_coord)+
-  geom_label(aes(x = Dim.1, y = Dim.2, label = rownames(quali_coord)), data = quali_coord)+
-  ylab("Dim 2 (18%)")+
-  xlab("Dim 1 (22%)")+
+  ylab("PC2 (18,9%)")+
+  xlab("PC1 (28,7%)")+
   xlim(-3, 3)+
-  theme_bw()
+  theme_bw(base_size = 16)+
+  theme(legend.title = element_text(size = 12),
+        legend.key.width = unit(0.5,"cm"))
 
-#ggsave("Output/paper_fig/acp_abs_bouss.png", width = 8, height = 7)
+#ggsave("Output/paper_fig/acp_abs_bouss.png", width = 9, height = 6)
 
 ggplot(result_acp)+
   geom_point(aes(x = Dim.1, y = Dim.2, colour = slope))+

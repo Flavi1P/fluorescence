@@ -234,72 +234,55 @@ fitted_abs <- argo_new %>% group_by(code) %>% do(model = lm(a_470 ~ t_chla + 0, 
   unnest(coef) %>% 
   filter(term == "t_chla")
 
+fitted_abs$code <- factor(fitted_abs$code, levels = c("ANTA", "SANT", "ARCT", "BPLR", "EMED", "WMED", "SPSG", "ARCH"))
+fitted_yield$code <- factor(fitted_yield$code, levels = c("ANTA", "SANT", "ARCT", "BPLR", "EMED", "WMED", "SPSG", "ARCH"))
+
+yname2 <- expression(atop("Chla specific absorption at 470 nm",~(m^-2%.%"(mg"%.%"chla)"^{"-1"})))
+
+
+gslope <-ggplot(fitted_slope)+
+  geom_bar(aes(y = estimate, x = code, fill = code), stat = "identity")+
+  geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error, x = code))+
+  scale_fill_manual(name = "code",values = myColors, guide = "none")+
+  theme_bw(base_size = 16)+
+  ylab("Slope factor")+
+  xlab("Oceanic bioregion")+
+  ggtitle("Slope factor") +
+  geom_vline(xintercept = c(4.5, 6.5)) +
+  annotate(geom = 'text', x = 2.5, y = 3, label = 'Polar') +
+  annotate(geom = 'text', x = 5.5, y = 3, label = 'Temperate') +
+  annotate(geom = 'text', x = 7.5, y = 3, label = 'Equatorial')
+
 gabs <- ggplot(fitted_abs)+
-  geom_bar(aes(y = estimate, x = reorder(code, estimate), fill = code), stat = "identity")+
-  geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error, x = reorder(code, estimate)))+
-  scale_fill_brewer(palette = "Set1", guide = FALSE)+
-  theme_bw()+
-  ylab("Specifc absorption")+
-  xlab("Oceanic province")+
-  ggtitle("Specific absorption")
+  geom_bar(aes(y = estimate, x = code, fill = code), stat = "identity")+
+  geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error, x = code))+
+  scale_fill_manual(name = "code",values = myColors, guide = "none")+
+  theme_bw(base_size = 16)+
+  ylab(yname2)+
+  xlab("Oceanic bioregion")+
+  ggtitle("Specific absorption") +
+  geom_vline(xintercept = c(4.5, 6.5))+
+  annotate(geom = 'text', x = 2.5, y = 0.07, label = 'Polar') +
+  annotate(geom = 'text', x = 5.5, y = 0.07, label = 'Temperate') +
+  annotate(geom = 'text', x = 7.5, y = 0.07, label = 'Equatorial')
 
 gyield <- ggplot(fitted_yield)+
-  geom_bar(aes(y = estimate, x = reorder(code, estimate), fill = code), stat = "identity")+
-  geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error, x = reorder(code, estimate)))+
-  scale_fill_brewer(palette = "Set1", guide = FALSE)+
-  theme_bw()+
-  ylab("Fluorescence yield")+
-  xlab("Oceanic province")+
-  ggtitle("Fluorescence yield (counts per unit of absorption)")
-plot_layout(guide = "collect", height = c(1,2))
-  
+  geom_bar(aes(y = estimate, x = code, fill = code), stat = "identity")+
+  geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error, x = code))+
+  scale_fill_manual(name = "code",values = myColors, guide = "none")+
+  theme_bw(base_size = 16)+
+  ylab("Fluorescence quantum yield (Counts.m²)")+
+  xlab("Oceanic bioregion")+
+  ggtitle("Quantum yield of fluorescence") +
+  geom_vline(xintercept = c(4.5, 6.5))+
+  annotate(geom = 'text', x = 2.5, y = 4000, label = 'Polar') +
+  annotate(geom = 'text', x = 5.5, y = 4000, label = 'Temperate') +
+  annotate(geom = 'text', x = 7.5, y = 4000, label = 'Equatorial')
+
 gslope/gabs/gyield
 
-fitted_yield$code <- factor(fitted_yield$code, levels = c("ANTA", "SANT", "ARCT", "BPLR", "EMED", "WMED", "SPSG", "ARCH"))
-fitted_abs$code <- factor(fitted_abs$code, levels = c("ANTA", "SANT", "ARCT", "BPLR", "EMED", "WMED", "SPSG", "ARCH"))
+ggsave("Output/paper_fig/full_barplot.png", height = 13, width = 13)
 
-fitted_abs <- fitted_abs %>% 
-  as_tibble() %>% 
-  mutate(region = case_when(
-    code %in% c("ANTA", "SANT", "ARCT", "BPLR") ~ "Polar",
-    code %in% c("WMED", "EMED") ~ "Temperate",
-    code %in% c("SPSG", "ARCH") ~ "Equatorial"
-  )) %>% 
-  left_join(codref, by = "code")
-
-
-
-fitted_yield <- fitted_yield %>% 
-  as_tibble() %>% 
-  mutate(region = case_when(
-    code %in% c("ANTA", "SANT", "ARCT", "BPLR") ~ "Polar",
-    code %in% c("WMED", "EMED") ~ "Temperate",
-    code %in% c("SPSG", "ARCH") ~ "Equatorial"
-  )) %>% 
-  left_join(codref, by = "code")
-
-
-ggplot(fitted_abs)+
-  geom_bar(aes(y = estimate, x = code, fill = code), stat = "identity")+
-  geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error, x = code))+
-  scale_fill_brewer(palette = "Set1", guide = "none")+
-  theme_bw()+
-  ylab("Specifc absorption")+
-  xlab("Oceanic province")+
-  ggtitle("Specific absorption")+
-  facet_wrap(.~ biome, scale = "free_x")
-
-ggplot(fitted_yield)+
-  geom_bar(aes(y = estimate, x = code, fill = code), stat = "identity")+
-  geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error, x = code))+
-  scale_fill_brewer(palette = "Set1", guide = "none")+
-  theme_bw()+
-  ylab("Specifc absorption")+
-  xlab("Oceanic province")+
-  ggtitle("Fluorescence Quantum Yield")+
-  facet_wrap(.~ biome, scale = "free_x")
-
-#ggsave("Output/paper_fig/full_barplot.png", height = 7, width = 10)
 
 argo_new <- argo_new %>% mutate(dp_rate = (peri + but + hex + zea + fuco + allo + chlb) / chla)
 
