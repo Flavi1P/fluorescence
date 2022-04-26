@@ -174,16 +174,57 @@ gmap <- ggplot(lov_map)+
 
 yname <- expression(atop("Chla specific absorption at 470 nm",~(m^-2%.%"(mg"%.%"chla)"^{"-1"})))
 
+fitted_models_470 <- fitted_models_470 %>% mutate(biome = case_when(code == "SANT" ~ "Polar",
+                                                                    code == "BENG" ~ "Coastal",
+                                                                    code == "CNRY" ~ "Coastal",
+                                                                    code == "ANTA" ~ "Polar",
+                                                                    code == "NATR" ~ "Equatorial",
+                                                                    code == "MEDI" ~ "Temperate",
+                                                                    code == "CHIL" ~ "Coastal",
+                                                                    code == "ISSG" ~ "Equatorial",
+                                                                    code == "SSTC" ~ "Temperate",
+                                                                    code == "SPSG" ~ "Equatorial",
+                                                                    code == "WARM" ~ "Equatorial",
+                                                                    code == "PEQD" ~ "Equatorial",
+                                                                    code == "NASE" ~ "Temperate",
+                                                                    code == "NADR" ~ "Temperate"))
+
+#Create a custom color scale
+polarcolor <- brewer.pal(4,"PuBu")[c(3,4)]
+medcolor <- brewer.pal(4, "Greens")
+equatcolor <- brewer.pal(5, "OrRd")
+
+myColors <- c(polarcolor, medcolor, equatcolor)
+
+names(myColors) <- c("SANT", "ANTA", "MEDI", "SSTC", "NASE", "NADR", "NATR", "ISSG", "SPSG", "WARM", "PEQD")
+
+fitted_models_470 <- filter(fitted_models_470, biome != "Coastal")
+
+fitted_models_470$code <- factor(fitted_models_470$code, levels = c("SANT", "ANTA", "MEDI", "SSTC", "NASE", "NADR", "NATR", "ISSG", "SPSG", "WARM", "PEQD"))
+gmap <- ggplot(lov_map)+
+  geom_point(aes(x = lon, y = lat, fill = code), size = 3, shape = 21)+
+  geom_polygon(data = map_vec, aes(x = long, y = lat, group = group))+
+  coord_quickmap()+
+  xlab("Longitude (°E)")+
+  ylab("Latitude (°N)")+
+  scale_fill_manual(values = myColors)+
+  theme_bw(base_size = 16)
+
+
 gmap/
   ggplot(fitted_models_470)+
-  geom_histogram(aes(x = reorder(code, estimate), y = estimate, fill = code), stat = 'identity')+
-  geom_errorbar(aes(x = reorder(code, estimate), ymin = estimate - std.error, ymax = estimate + std.error))+
+  geom_histogram(aes(x = code, y = estimate, fill = code), stat = 'identity')+
+  geom_errorbar(aes(x = code, ymin = estimate - std.error, ymax = estimate + std.error))+
   ylab(yname)+
   xlab('Oceanic province')+
-  scale_fill_manual(values = mycolors, guide = "none")+
+  scale_fill_manual(values = myColors, guide = "none")+
   theme_bw(base_size = 16)+
   theme(axis.text.x=element_text(angle=45, hjust=1))+
-  plot_layout(guide = "collect", widths = 30)
+  plot_layout(guide = "collect", widths = 30)+
+  geom_vline(xintercept = c(2.5, 6.5)) +
+  annotate(geom = 'text', x = 1.5, y = 0.06, label = 'Polar') +
+  annotate(geom = 'text', x = 4.5, y = 0.06, label = 'Temperate') +
+  annotate(geom = 'text', x = 9, y = 0.06, label = 'Equatorial')
 
 ggsave("Output/paper_fig/global_specific_abs.png", width = 9, height = 9)
 

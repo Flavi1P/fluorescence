@@ -237,6 +237,8 @@ fitted_abs <- argo_new %>% group_by(code) %>% do(model = lm(a_470 ~ t_chla + 0, 
 fitted_abs$code <- factor(fitted_abs$code, levels = c("ANTA", "SANT", "ARCT", "BPLR", "EMED", "WMED", "SPSG", "ARCH"))
 fitted_yield$code <- factor(fitted_yield$code, levels = c("ANTA", "SANT", "ARCT", "BPLR", "EMED", "WMED", "SPSG", "ARCH"))
 
+
+
 yname2 <- expression(atop("Chla specific absorption at 470 nm",~(m^-2%.%"(mg"%.%"chla)"^{"-1"})))
 
 
