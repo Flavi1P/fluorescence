@@ -38,11 +38,11 @@ The purpose of this project is to investigate the influence of phytoplankton com
 ### Output
 
 The different figures for the analysis.
-Figures 1 and 8 are computed from region_plot.R script
-Figure 2 is computed from ternary_diagram.R script
-Figure 3 and 4 are computed from bouss_acp.R script
-Figure 5 is computed from glo_aphy_viz.R script
-Fiigure 6 and 7 are computed from bouss_merge.R script
+* Figures 1 and 8 are computed from region_plot.R script
+* Figure 2 is computed from ternary_diagram.R script
+* Figure 3 and 4 are computed from bouss_acp.R script
+* Figure 5 is computed from glo_aphy_viz.R script
+* Figure 6 and 7 are computed from bouss_merge.R script
 
 
 ## Contact
