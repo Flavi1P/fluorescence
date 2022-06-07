@@ -1,0 +1,175 @@
+
+<ER>
+]
+11:32:23 15/04/15
+Get measure ?TI 
+DATE/TIME Measure: 11:30:24 15/04/15
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.3620 7.2910 13.0200
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.4060 7.3060 12.9690
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.4680 7.3090 12.7210
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.5090 7.3120 12.6330
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.5510 7.3130 12.5190
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6140 7.3230 12.2930
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6250 7.3160 12.0710
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6420 7.3150 12.1320
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6660 7.3140 12.0000
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7100 7.3200 11.9040
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7130 7.3190 11.9080
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6810 7.3130 11.9170
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6900 7.3120 11.9170
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6690 7.3090 11.9410
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7040 7.3130 11.9240
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6530 7.3070 12.0000
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6490 7.3050 11.9080
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6920 7.3100 11.8130
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6990 7.3090 11.8970
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6960 7.3080 11.8460
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6900 7.3060 11.8140
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6660 7.3020 11.8150
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7010 7.3050 11.7100
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6840 7.3000 11.7290
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6990 7.2980 11.6680
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6960 7.2970 11.6530
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7130 7.3010 11.5140
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7060 7.2960 11.5050
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7290 7.2950 11.4200
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7350 7.2950 11.2960
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7760 7.2980 11.3210
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7800 7.2990 11.2220
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7620 7.2920 11.2380
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7650 7.2900 11.2280
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7440 7.2900 11.1580
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7460 7.2880 11.1750
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7550 7.2870 11.0980
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7760 7.2930 11.1760
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7350 7.2870 11.1200
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7150 7.2850 11.2640
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7190 7.2850 11.1490
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7070 7.2850 11.2430
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7290 7.2890 11.2830
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.7370 7.2890 11.3000
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6970 7.2830 11.3350
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6840 7.2830 11.3590
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6680 7.2800 11.4650
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6510 7.2810 11.5170
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6820 7.2850 11.5330
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6770 7.2840 11.5110
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6660 7.2840 11.5640
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6560 7.2840 11.5770
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6150 7.2790 11.6290
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6510 7.2830 11.6220
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.6380 7.2820 11.6840
+]
+Get measure ?ME 
+ONE SHOT Measure: 1 DO 43 1274 40.5950 7.2780 11.6590
+]

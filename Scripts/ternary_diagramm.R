@@ -1,9 +1,9 @@
 library(ggtern)
-
+library(RColorBrewer)
 argo <- read_csv("Output/Data/argo_matchup.csv")
 
 #Create a custom color scale
-polarcolor <- brewer.pal(4,"PuBu")
+polarcolor <- brewer.pal(5,"PuBu")[c(2,3,4,5)]
 medcolor <- brewer.pal(4, "Greens")[c(3,4)]
 equatcolor <- brewer.pal(3, "OrRd")[c(2,3)]
 
@@ -33,11 +33,11 @@ ggtern(data = argo, aes(pico, nano, micro, value = ratio))+
                         expand=1,
                         )+
   geom_point(aes(colour = code))+
-  scale_fill_gradient(low= "#ffffcc", high = "#41b6c4", name = parse(text = "Chla^fluo/Chla^HPLC"))+
+  scale_fill_gradient(low= "#ffffcc", high = "#41b6c4", name = "Slope factor")+
   scale_colour_manual(name = "code",values = myColors)
 
-ggsave("Output/paper_fig/ggtern.png", width = 10, height = 10)
-
+#ggsave("Output/paper_fig/ggtern.png", width = 10, height = 10)
+ggsave("Output/Figures/ternary_diag.jpg", dpi = 300, width = 20, height = 15, unit = "cm")
 
 
 

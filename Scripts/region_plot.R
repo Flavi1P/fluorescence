@@ -62,8 +62,8 @@ argo_new <- argo %>% mutate(fluo_biased = fluo *2, ratio = fluo_biased/t_chla) %
 
 #select only positiv ratios (no negativ values in the fluo) and filter on the depth z/ze < 1.5
 argo_new <- filter(argo_new, ratio > 0) %>% filter(code != "SARC") 
-   # mutate(z_ze = depth/ze) %>% 
-   # filter(z_ze < 1.5)
+    # mutate(z_ze = depth/ze) %>% 
+    # filter(z_ze < 1)
 
 #compute basopriton and counts
 argo_new <- argo_new %>% mutate(a_spe_470 = 0.0332 * (t_chla^-0.368),
@@ -140,19 +140,19 @@ fitted_slope$code <- factor(fitted_slope$code, levels = c("ANTA", "SANT", "ARCT"
 gslope <-ggplot(fitted_slope)+
   geom_bar(aes(y = estimate, x = code, fill = code), stat = "identity")+
   geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error, x = code))+
-  scale_fill_manual(name = "code",values = myColors, guide = "none")+
-  theme_bw()+
-  ylab("Slope factor")+
-  xlab("Oceanic province")+
-  ggtitle("Slope factor") +
+  scale_fill_manual(name = "Code",values = myColors, guide = "none")+
+  theme_bw(base_size = 16)+
+  ylab("Slope Factor")+
+  xlab("Bioregion")+
   geom_vline(xintercept = c(4.5, 6.5)) +
   annotate(geom = 'text', x = 2.5, y = 3, label = 'Polar') +
   annotate(geom = 'text', x = 5.5, y = 3, label = 'Temperate') +
-  annotate(geom = 'text', x = 7.5, y = 3, label = 'Equatorial')
+  annotate(geom = 'text', x = 7.5, y = 3, label = 'Subtropical')
 
 
 g1/ gslope +
   plot_layout(guide = "collect", height = c(1,2))
+#ggsave("Output/Figures/slope_factor.jpg", dpi = 300, width = 20, height = 15, unit = c("cm"))
 #ggsave("Output/paper_fig/slope_factor.png", height = 8, width = 10)
 
 sample_size <- argo %>% 
@@ -219,15 +219,10 @@ argo %>%
 
 argo_new$biome[is.na(argo_new$biome)] <- "Westerlies "
 
-fitted_yield <- argo_new %>% group_by(code) %>% do(model = lm(counts ~ a_spe_470 + 0, data = .)) %>% ungroup() %>% 
+fitted_yield <- argo_new %>% group_by(code) %>% do(model = lm(counts ~ a_470 + 0, data = .)) %>% ungroup() %>% 
   transmute(code, coef = map(model, tidy)) %>% 
   unnest(coef) %>% 
-  filter(term == "a_spe_470")
-
-fitted_yield_biome <- argo_new %>% group_by(biome) %>% do(model = lm(counts ~ a_spe_470 + 0, data = .)) %>% ungroup() %>% 
-  transmute(biome, coef = map(model, tidy)) %>% 
-  unnest(coef) %>% 
-  filter(term == "a_spe_470")
+  filter(term == "a_470")
 
 fitted_abs <- argo_new %>% group_by(code) %>% do(model = lm(a_470 ~ t_chla + 0, data = .)) %>% ungroup() %>% 
   transmute(code, coef = map(model, tidy)) %>% 
@@ -237,7 +232,10 @@ fitted_abs <- argo_new %>% group_by(code) %>% do(model = lm(a_470 ~ t_chla + 0, 
 fitted_abs$code <- factor(fitted_abs$code, levels = c("ANTA", "SANT", "ARCT", "BPLR", "EMED", "WMED", "SPSG", "ARCH"))
 fitted_yield$code <- factor(fitted_yield$code, levels = c("ANTA", "SANT", "ARCT", "BPLR", "EMED", "WMED", "SPSG", "ARCH"))
 
-yname2 <- expression(atop("Chla specific absorption at 470 nm",~(m^-2%.%"(mg"%.%"chla)"^{"-1"})))
+
+
+yname2 <- expression(atop("a*(470)",~(m^2%.%"(mg"%.%"chla)"^{"-1"})))
+yname3 <- expression(atop(phi~("Counts"%.%m^-1)))
 
 
 gslope <-ggplot(fitted_slope)+
@@ -246,12 +244,12 @@ gslope <-ggplot(fitted_slope)+
   scale_fill_manual(name = "code",values = myColors, guide = "none")+
   theme_bw(base_size = 16)+
   ylab("Slope factor")+
-  xlab("Oceanic bioregion")+
-  ggtitle("Slope factor") +
+  xlab("")+
   geom_vline(xintercept = c(4.5, 6.5)) +
   annotate(geom = 'text', x = 2.5, y = 3, label = 'Polar') +
   annotate(geom = 'text', x = 5.5, y = 3, label = 'Temperate') +
-  annotate(geom = 'text', x = 7.5, y = 3, label = 'Equatorial')
+  annotate(geom = 'text', x = 7.5, y = 3, label = 'Subtropical')+
+  ylim(0,3.2)
 
 gabs <- ggplot(fitted_abs)+
   geom_bar(aes(y = estimate, x = code, fill = code), stat = "identity")+
@@ -259,29 +257,30 @@ gabs <- ggplot(fitted_abs)+
   scale_fill_manual(name = "code",values = myColors, guide = "none")+
   theme_bw(base_size = 16)+
   ylab(yname2)+
-  xlab("Oceanic bioregion")+
-  ggtitle("Specific absorption") +
+  xlab("")+
+  ylim(0,0.085)+
   geom_vline(xintercept = c(4.5, 6.5))+
-  annotate(geom = 'text', x = 2.5, y = 0.07, label = 'Polar') +
-  annotate(geom = 'text', x = 5.5, y = 0.07, label = 'Temperate') +
-  annotate(geom = 'text', x = 7.5, y = 0.07, label = 'Equatorial')
+  annotate(geom = 'text', x = 2.5, y = 0.08, label = 'Polar') +
+  annotate(geom = 'text', x = 5.5, y = 0.08, label = 'Temperate') +
+  annotate(geom = 'text', x = 7.5, y = 0.08, label = 'Subtropical')
 
 gyield <- ggplot(fitted_yield)+
   geom_bar(aes(y = estimate, x = code, fill = code), stat = "identity")+
   geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error, x = code))+
   scale_fill_manual(name = "code",values = myColors, guide = "none")+
   theme_bw(base_size = 16)+
-  ylab("Fluorescence quantum yield (Counts.m²)")+
-  xlab("Oceanic bioregion")+
-  ggtitle("Quantum yield of fluorescence") +
+  ylab(yname3)+
+  xlab("Bioregion")+
   geom_vline(xintercept = c(4.5, 6.5))+
-  annotate(geom = 'text', x = 2.5, y = 4000, label = 'Polar') +
-  annotate(geom = 'text', x = 5.5, y = 4000, label = 'Temperate') +
-  annotate(geom = 'text', x = 7.5, y = 4000, label = 'Equatorial')
+  annotate(geom = 'text', x = 2.5, y = 14500, label = 'Polar') +
+  annotate(geom = 'text', x = 5.5, y = 14500, label = 'Temperate') +
+  annotate(geom = 'text', x = 7.5, y = 14500, label = 'Subtropical')+
+  ylim(0,15100)
 
 gslope/gabs/gyield
 
-ggsave("Output/paper_fig/full_barplot.png", height = 13, width = 13)
+#ggplot2::ggsave("Output/Figures/full_barplot.jpg", width = 20, height = 15, unit = "cm", dpi = "print")
+#ggsave("Output/paper_fig/full_barplot.png", height = 13, width = 13)
 
 
 argo_new <- argo_new %>% mutate(dp_rate = (peri + but + hex + zea + fuco + allo + chlb) / chla)
@@ -304,7 +303,7 @@ ggplot(summary_dp)+
   ggtitle("Ratio between accessories pigments and chlorophyll a")+
   theme_bw()
 
-ggsave("Output/paper_fig/yiled_ap.png", height = 7, width = 10)
+#ggsave("Output/paper_fig/yiled_ap.png", height = 7, width = 10)
 
 ggplot(argo_new)+
   geom_boxplot(aes(x = code, y = dp_rate, fill = code))+

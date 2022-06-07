@@ -1,5 +1,6 @@
 library(FactoMineR)
 library(tidyverse)
+library(ggrepel)
 
 bouss <- read_csv("Output/Data/boussole_merged.csv")
 
@@ -12,7 +13,7 @@ bouss_acp <- bouss %>% mutate(tchlb = tchlb/tchla,
                               zea = zea/tchla)
 
 
-test <- PCA(bouss_acp[,c(8:19, 24)], quanti.sup = c(1,2,3), quali.sup = 13,  scale.unit = TRUE)
+test <- PCA(bouss_acp[,c(8:19, 24)], quanti.sup = c(1,2,3,4), quali.sup = 13,  scale.unit = TRUE)
 
 coord <- data.frame(test$ind$coord)
 var_coord <- bind_rows(data.frame(test$var$coord))
@@ -49,22 +50,36 @@ seasons_label <- result_acp %>% select(season, Dim.1, Dim.2) %>%
   summarise_all(mean) %>%
   ungroup()
 
+var_coord <- var_coord %>% mutate(pigname = rownames(.)) %>% 
+  mutate(pigname = case_when(pigname == "but" ~ "19'-BF",
+                             pigname == "hex" ~"19'-HF",
+                             pigname == "fuco" ~"Fuco",
+                             pigname == "allo" ~ "Allo",
+                             pigname == "viola" ~"Viola",
+                             pigname == "diad" ~ "Diad",
+                             pigname == "zea" ~"Zea",
+                             pigname ==  "peri"  ~"Peri"))
+
+
 ggplot(result_acp)+
   geom_point(aes(x = Dim.1, y = Dim.2, colour = depth2))+
   scale_colour_brewer(palette = "Paired", name = "Depth (m)")+
   geom_segment(aes(x = 0, y = 0, xend = Dim.1*2.7, yend = Dim.2*2.7), data = var_coord)+
   geom_segment(aes(x = 0, y = 0, xend = Dim.1*3, yend = Dim.2*3), colour = "red", data = supp_coord)+
-  geom_text_repel(aes(x = Dim.1*3, y = Dim.2*3, label = rownames(var_coord)), data = var_coord, size = 6)+
-  geom_text_repel(aes(x = Dim.1*3.2, y = Dim.2*3.2, label = rownames(supp_coord)), colour = "red", data = supp_coord, size = 6)+
+  geom_text_repel(aes(x = Dim.1*3, y = Dim.2*3, label = pigname), data = var_coord, size = 5)+
+  geom_text_repel(aes(x = Dim.1*3.2, y = Dim.2*3.2, label = rownames(supp_coord)), colour = "red", data = supp_coord, size = 5)+
   geom_label(aes(x = Dim.1, y = Dim.2, label = season), data = seasons_label)+
-  ylab("PC2 (18,9%)")+
-  xlab("PC1 (28,7%)")+
+  ylab("PC2 (18.9%)")+
+  xlab("PC1 (28.7%)")+
   xlim(-3, 3)+
   theme_bw(base_size = 16)
 
-ggsave("Output/paper_fig/acp_bouss.png", width = 9, height = 6)
+#ggsave("Output/paper_fig/acp_bouss.png", width = 9, height = 6)
+#ggsave("Output/Figures/acp_bouss.jpg", dpi = "print", width = 20, height = 15, unit = "cm")
 
-colorname <- expression(atop(a[470]^{"*"},(m^-2%.%"(mg"%.%"chla)"^{"-1"})))
+
+
+colorname <- expression(atop("a*(470)",(m^2%.%"(mg"%.%"chla)"^{"-1"})))
 astar <- expression(a[470]^{"*"})
 aunit <- expression((m^-2%.%"(mg"%.%"chla)"^{"-1"}))
 ggplot(result_acp)+
@@ -72,16 +87,17 @@ ggplot(result_acp)+
   scale_colour_viridis_c(name = colorname)+
   geom_segment(aes(x = 0, y = 0, xend = Dim.1*2.7, yend = Dim.2*2.7), data = var_coord)+
   geom_segment(aes(x = 0, y = 0, xend = Dim.1*3, yend = Dim.2*3), colour = "red", data = supp_coord)+
-  geom_text(aes(x = Dim.1*3, y = Dim.2*3, label = rownames(var_coord)), data = var_coord)+
-  geom_text(aes(x = Dim.1*3.2, y = Dim.2*3.2, label = rownames(supp_coord)), colour = "red", data = supp_coord)+
-  ylab("PC2 (18,9%)")+
-  xlab("PC1 (28,7%)")+
+  geom_text(aes(x = Dim.1*2.8, y = Dim.2*2.8, label = pigname), data = var_coord, size = 5)+
+  geom_text_repel(aes(x = Dim.1*3.1, y = Dim.2*3.1, label = rownames(supp_coord)), colour = "red", data = supp_coord, size = 5)+
+  ylab("PC2 (18.9%)")+
+  xlab("PC1 (28.7%)")+
   xlim(-3, 3)+
   theme_bw(base_size = 16)+
   theme(legend.title = element_text(size = 12),
         legend.key.width = unit(0.5,"cm"))
 
 #ggsave("Output/paper_fig/acp_abs_bouss.png", width = 9, height = 6)
+ggsave("Output/Figures/acp_abs_bouss.jpg", device ="jpeg", dpi = "print", width = 20, height = 15, units = "cm")
 
 ggplot(result_acp)+
   geom_point(aes(x = Dim.1, y = Dim.2, colour = slope))+

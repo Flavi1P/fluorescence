@@ -166,9 +166,9 @@ yield_abs <- tibble("depth2" = fitted_abs$depth2,
                     "ps_sd" = fitted_ps$std.error) %>% 
   filter(depth2 <= 60)
 
-yield_abs$depth2 <- factor(yield_abs$depth2, c("80", "70", "60", "50", "40", "30", "20", "10", "5"))
+#yield_abs$depth2 <- factor(yield_abs$depth2, c("80", "70", "60", "50", "40", "30", "20", "10", "5"))
 
-yname <- expression(atop("Chla specific absorption at 470 nm"~(m^-2%.%"(mg"%.%"chla)"^{"-1"})))
+yname <- expression(atop("a*(470)"~(m^2%.%"(mg chla)"^{"-1"})))
 
 ggplot(yield_abs)+
   geom_bar(aes(y = abs, x = depth2, fill = depth2), stat = "identity")+
@@ -181,7 +181,20 @@ ggplot(yield_abs)+
   theme_bw(base_size = 16)+
   ylim(0,0.07)
 
-#
+
+ggplot(yield_abs)+
+  geom_line(aes(y = abs, x = -depth2))+
+  geom_point(aes(y = abs, x = -depth2))+
+  geom_errorbar(aes(ymin = abs - abs_sd, ymax = abs + abs_sd, x = -depth2))+
+  coord_flip()+
+  facet_wrap(.~season, nrow = 1)+
+  ylab(yname)+
+  xlab("Depth (m)")+
+  theme_bw(base_size = 16)+
+  ylim(0,0.07)
+
+ggsave("Output/Figures/specific_abs_bouss.jpg", width = 20, height = 15, units = "cm", dpi = 300)
+#ggsave("Output/paper_fig/specific_abs_bouss_v2.png", width = 10, height = 5)
 
 yname2 <- expression(atop("Chla specific photosynthetic absorption at 470 nm"~(m^-2%.%"(mg"%.%"chla)"^{"-1"})))
 
@@ -196,6 +209,7 @@ ggplot(yield_abs)+
   theme_bw(base_size = 14)+
   ylim(0,0.07)
 
+
 #ggsave("Output/paper_fig/photosynthetic_abs_bouss.png", width = 10, height = 5)
 
 ggplot(yield_abs)+
@@ -208,7 +222,22 @@ ggplot(yield_abs)+
   facet_wrap(.~season, nrow = 1)+
   theme_bw(base_size = 14)
 
-#ggsave("Output/paper_fig/yield_abs.png", width = 8, height = 4)
+yname3 <- expression(atop(phi~("RFU"%.%m^-1)))
+
+ggplot(yield_abs)+
+  geom_line(aes(y = yield, x = -depth2))+
+  geom_point(aes(y = yield, x = -depth2))+
+  geom_errorbar(aes(ymin = yield - yield_sd, ymax = yield + yield_sd, x = -depth2))+
+  coord_flip()+
+  facet_wrap(.~season, nrow = 1)+
+  ylab(yname)+
+  xlab("Depth (m)")+
+  ylab(yname3)+
+  theme_bw(base_size = 16)
+
+
+ggsave("Output/Figures/yield_bouss.jpg", width = 20, height = 15, units = "cm", dpi = 300)
+#ggsave("Output/paper_fig/yield_abs_v2.png", width = 8, height = 4)
 
 ggplot(yield_abs)+
   geom_bar(aes(y = slope, x = depth2, fill = depth2), stat = "identity")+
