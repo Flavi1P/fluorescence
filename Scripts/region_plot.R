@@ -15,8 +15,8 @@ library(RColorBrewer)
 
 #open datas
 path <- "Data/Longhurst"
-argo <- read_csv("Data/argo_matchup_ze.csv")
-ref <- read_csv("Data/ref.csv")
+argo <- read_csv("Data/Argo Floats output/argo_matchup_ze.csv")
+ref <- read_csv("Data/Argo Floats output/ref.csv")
 
 #correct longitude for takap floats
 argo$lon[argo$lovbio %in% c("takapm014b", "takapm013b", "takapm009b", "takapm005b")] <- -argo$lon[argo$lovbio %in% c("takapm014b", "takapm013b", "takapm009b", "takapm005b")]
@@ -79,7 +79,7 @@ names(region_argo) <- c("code", "mean", "sd", "min", "max")
 region_argo$sd <- ifelse(region_argo$sd > region_argo$mean, region_argo$mean, region_argo$sd)
 
 #add the code of the region
-codref <- read_excel("Data/Longhurst_Province_Summary.xls", 
+codref <- read_excel("Data/Longhurst/Longhurst_Province_Summary.xls", 
                      range = "A17:B70", col_names = FALSE)
 names(codref) <- c("code", "region")
 

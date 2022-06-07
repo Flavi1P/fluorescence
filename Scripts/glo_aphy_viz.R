@@ -16,9 +16,9 @@ library(lmodel2)
 map_vec <- map_data("world")
 
 types <- c('c', 'c', rep('n', 445))
-lov_afc <- read_csv('Data/lov_afc.csv', col_types = as.list(types))
+lov_afc <- read_csv('Data/absorption/lov_afc.csv', col_types = as.list(types))
 
-argo_hplc <- read_csv('Data/hplc_argo_campaign') %>% rename("campagne" = cruise_name, "station" = station_name)
+argo_hplc <- read_csv('Data/Raw HPLC Argo/hplc_argo_campaign') %>% rename("campagne" = cruise_name, "station" = station_name)
 
 test <- bind_rows(lov_afc, argo_hplc)
 
