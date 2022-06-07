@@ -1,6 +1,6 @@
 # Influence of Phytoplankton Communities on In-Situ Fluorescence 
 
-## Project Intro/Objective
+## Project Objective
 The purpose of this project is to investigate the influence of phytoplankton community composition on the in situ fluorescence signal. The phytoplankton community composition is evaluate through HPLC data.
 
 
