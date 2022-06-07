@@ -20,7 +20,7 @@ The purpose of this project is to investigate the influence of phytoplankton com
 * bplr_pig - format pigments from bplr region
 * cluster_abs - create clusters from absorption data (deprecated)
 * data_viz - some exploration (deprecated)
-* glo_aphy_viz data exploration of aphy
+* glo_aphy_viz - compute a barplot of absorption data from the aphy dataset
 * hplc_shaping - format hplc raw data
 * match_dist - match hplc and argo unsupervised
 * match_onebyone - match hplc and argo, float by float, best to use
