@@ -62,42 +62,41 @@ var_coord <- var_coord %>% mutate(pigname = rownames(.)) %>%
 
 
 ggplot(result_acp)+
-  geom_point(aes(x = Dim.1, y = Dim.2, colour = depth2))+
+  geom_point(aes(x = Dim.1, y = Dim.2, colour = depth2), size = 1.6)+
   scale_colour_brewer(palette = "Paired", name = "Depth (m)")+
   geom_segment(aes(x = 0, y = 0, xend = Dim.1*2.7, yend = Dim.2*2.7), data = var_coord)+
   geom_segment(aes(x = 0, y = 0, xend = Dim.1*3, yend = Dim.2*3), colour = "red", data = supp_coord)+
-  geom_text_repel(aes(x = Dim.1*3, y = Dim.2*3, label = pigname), data = var_coord, size = 5)+
-  geom_text_repel(aes(x = Dim.1*3.2, y = Dim.2*3.2, label = rownames(supp_coord)), colour = "red", data = supp_coord, size = 5)+
-  geom_label(aes(x = Dim.1, y = Dim.2, label = season), data = seasons_label)+
+  geom_text_repel(aes(x = Dim.1*3, y = Dim.2*3, label = pigname), data = var_coord, size = 6)+
+  geom_text_repel(aes(x = Dim.1*3.2, y = Dim.2*3.2, label = rownames(supp_coord)), colour = "red", data = supp_coord, size = 6)+
+  geom_label(aes(x = Dim.1, y = Dim.2, label = season), data = seasons_label, size = 6)+
   ylab("PC2 (18.9%)")+
   xlab("PC1 (28.7%)")+
   xlim(-3, 3)+
-  theme_bw(base_size = 16)
+  theme_bw(base_size = 11)
 
 #ggsave("Output/paper_fig/acp_bouss.png", width = 9, height = 6)
 #ggsave("Output/Figures/acp_bouss.jpg", dpi = "print", width = 20, height = 15, unit = "cm")
 
-
+ggsave("Output/Figures/acp_bouss_redim.png", width = 9, height = 8)
 
 colorname <- expression(atop("a*(470)",(m^2%.%"(mg"%.%"chla)"^{"-1"})))
 astar <- expression(a[470]^{"*"})
 aunit <- expression((m^-2%.%"(mg"%.%"chla)"^{"-1"}))
+
 ggplot(result_acp)+
   geom_point(aes(x = Dim.1, y = Dim.2, colour = abs))+
   scale_colour_viridis_c(name = colorname)+
   geom_segment(aes(x = 0, y = 0, xend = Dim.1*2.7, yend = Dim.2*2.7), data = var_coord)+
   geom_segment(aes(x = 0, y = 0, xend = Dim.1*3, yend = Dim.2*3), colour = "red", data = supp_coord)+
-  geom_text(aes(x = Dim.1*2.8, y = Dim.2*2.8, label = pigname), data = var_coord, size = 5)+
-  geom_text_repel(aes(x = Dim.1*3.1, y = Dim.2*3.1, label = rownames(supp_coord)), colour = "red", data = supp_coord, size = 5)+
+  geom_text_repel(aes(x = Dim.1*2.8, y = Dim.2*2.8, label = pigname), data = var_coord, size = 6)+
+  geom_text_repel(aes(x = Dim.1*3.1, y = Dim.2*3.1, label = rownames(supp_coord)), colour = "red", data = supp_coord, size = 6)+
   ylab("PC2 (18.9%)")+
   xlab("PC1 (28.7%)")+
   xlim(-3, 3)+
-  theme_bw(base_size = 16)+
-  theme(legend.title = element_text(size = 12),
-        legend.key.width = unit(0.5,"cm"))
+  theme_bw(base_size = 11)
 
 #ggsave("Output/paper_fig/acp_abs_bouss.png", width = 9, height = 6)
-ggsave("Output/Figures/acp_abs_bouss.jpg", device ="jpeg", dpi = "print", width = 20, height = 15, units = "cm")
+ggsave("Output/Figures/acp_abs_bouss.png", dpi = "print", width = 9, height = 8, units = "cm")
 
 ggplot(result_acp)+
   geom_point(aes(x = Dim.1, y = Dim.2, colour = slope))+

@@ -25,22 +25,20 @@ argo <- argo %>% mutate(size_index = 0.1 * pico + 1 * nano + 10 * micro,
 
 
 ggtern(data = argo, aes(pico, nano, micro, value = ratio))+
-  theme_rgbw(base_size = 18)+
+  theme_rgbw(base_size = 9)+
   stat_interpolate_tern(geom="polygon",
-                        formula=value~x+y,
-                        method=lm,
+                        method = "lm",
                         aes(fill=..level..),
-                        breaks = seq(1,7, by = 0.5),
+                        breaks = seq(1,7, by = 0.01),
                         expand=1,
                         )+
-  geom_point(aes(colour = code))+
+  geom_point(aes(colour = code), size = 1)+
+  scale_colour_manual(name = " Code",values = myColors)+
   scale_fill_gradient(low= "#ffffcc", high = "#41b6c4", name = "Slope factor")+
-  scale_colour_manual(name = "code",values = myColors)
+  theme(legend.key = element_rect(fill = "white"))
 
 #ggsave("Output/paper_fig/ggtern.png", width = 10, height = 10)
-ggsave("Output/Figures/ternary_diag.jpg", dpi = 300, width = 20, height = 15, unit = "cm")
-
-
+ggsave("Output/Figures/ternary_diag_newdim.jpg", dpi = 300, width = 10, height = 10, unit = "cm")
 
 ggplot(argo, aes(x = size_index, y = ratio))+
   geom_point(aes(colour = code))+

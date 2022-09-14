@@ -48,7 +48,7 @@ argo <- argo %>% mutate(code = case_when(code == "MEDI" & lon > 18 ~ "EMED",
                                          code != "EMED" & code != "WMED" ~ code)) #split the med sea in two regions
 
 #Create a custom color scale
-polarcolor <- brewer.pal(4,"PuBu")
+polarcolor <- brewer.pal(5,"PuBu")[c(2:5)]
 medcolor <- brewer.pal(4, "Greens")[c(3,4)]
 equatcolor <- brewer.pal(3, "OrRd")[c(2,3)]
 
@@ -92,47 +92,23 @@ argo_new <- left_join(argo_new, codref)
 
 map_vec <- map_data("world")
 g1 <- ggplot(filter(argo_new))+
-  geom_point(aes(x = lon, y = lat, fill = code), size = 4, shape = 21)+
   geom_polygon(aes(x = long, y = lat, group = group), data = map_vec, fill = "gray28")+
+  geom_point(aes(x = lon, y = lat, fill = code), size = 2, shape = 21)+
   xlab("Longitude (°E)")+
   ylab("Latitude (°N)")+
-  theme_bw(base_size = 18)+
-  scale_fill_manual(name = "code",values = myColors)+
+  theme_bw(base_size = 11)+
+  scale_fill_manual(name = "Code",values = myColors)+
   coord_quickmap()
 
 region_argo$code <- as.character(region_argo$code)
-g2 <- ggplot(region_argo)+
-  geom_col(aes(x = reorder(code, mean), y = mean, fill = code))+
-  geom_errorbar(aes(x = code, ymin = mean - sd, ymax = mean + sd))+
-  xlab("Oceanic province")+
-  ylab("Fluo/Chla ratio")+
-  geom_errorbar(aes(code, ymax = 1, ymin = 1),
-                size=1, linetype = "longdash", inherit.aes = F, width = 1)+
-  guides(fill = FALSE)+
-  scale_fill_brewer(palette = "Set1")+
-  theme_bw(base_size = 20)
-
-g1+g2
-
-g3 <- ggplot(argo_new)+
-  geom_boxplot(aes(x = code, y = ratio, fill = code))+
-  geom_jitter(aes(x = code, y = ratio, colour = code))+
-  xlab("Longitude (°E)")+
-  ylab("ratio")+
-  scale_fill_brewer(palette = 'Set1')+
-  coord_quickmap()
-g2 + g3
 
 #compute the ratio by using a linear regrssion
-fitted_slope <- argo_new %>% group_by(code) %>% do(model = lm(fluo_biased ~ t_chla + 0, data = .)) %>% ungroup() %>% 
+fitted_slope <- argo_new %>% group_by(code) %>% do(model = lm(fluo_biased ~ t_chla+0, data = .)) %>% ungroup() %>% 
   transmute(code, coef = map(model, tidy)) %>% 
   unnest(coef) %>% 
   filter(term == "t_chla")
 
-ggplot(filter(argo_new, code == "SANT"))+
-  geom_point(aes(x = t_chla, y = fluo_biased, colour = lovbio))+
-  scale_colour_brewer(palette = "Set1")
-
+argo_slope <- left_join(argo_new, fitted_slope)
 
 fitted_slope$code <- factor(fitted_slope$code, levels = c("ANTA", "SANT", "ARCT", "BPLR", "EMED", "WMED", "SPSG", "ARCH"))
 
@@ -141,7 +117,7 @@ gslope <-ggplot(fitted_slope)+
   geom_bar(aes(y = estimate, x = code, fill = code), stat = "identity")+
   geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error, x = code))+
   scale_fill_manual(name = "Code",values = myColors, guide = "none")+
-  theme_bw(base_size = 16)+
+  theme_bw(base_size = 11)+
   ylab("Slope Factor")+
   xlab("Bioregion")+
   geom_vline(xintercept = c(4.5, 6.5)) +
@@ -150,10 +126,16 @@ gslope <-ggplot(fitted_slope)+
   annotate(geom = 'text', x = 7.5, y = 3, label = 'Subtropical')
 
 
-g1/ gslope +
-  plot_layout(guide = "collect", height = c(1,2))
+g1 + gslope +
+  plot_layout(guide = "collect", height = c(1,1), nrow = 2)
 #ggsave("Output/Figures/slope_factor.jpg", dpi = 300, width = 20, height = 15, unit = c("cm"))
+ggsave("Output/Figures/slope_factor_redim.jpg", dpi = 300, width = 20, height = 13, unit = c("cm"))
 #ggsave("Output/paper_fig/slope_factor.png", height = 8, width = 10)
+
+g1/ gslope_cor +
+  plot_layout(guide = "collect", height = c(1,2))
+
+#ggsave("Output/Figures/slope_factor_cor.jpg", dpi = 300, width = 20, height = 15, unit = c("cm"))
 
 sample_size <- argo %>% 
   group_by(code) %>%
@@ -242,7 +224,7 @@ gslope <-ggplot(fitted_slope)+
   geom_bar(aes(y = estimate, x = code, fill = code), stat = "identity")+
   geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error, x = code))+
   scale_fill_manual(name = "code",values = myColors, guide = "none")+
-  theme_bw(base_size = 16)+
+  theme_bw(base_size = 11)+
   ylab("Slope factor")+
   xlab("")+
   geom_vline(xintercept = c(4.5, 6.5)) +
@@ -255,7 +237,7 @@ gabs <- ggplot(fitted_abs)+
   geom_bar(aes(y = estimate, x = code, fill = code), stat = "identity")+
   geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error, x = code))+
   scale_fill_manual(name = "code",values = myColors, guide = "none")+
-  theme_bw(base_size = 16)+
+  theme_bw(base_size = 11)+
   ylab(yname2)+
   xlab("")+
   ylim(0,0.085)+
@@ -268,7 +250,7 @@ gyield <- ggplot(fitted_yield)+
   geom_bar(aes(y = estimate, x = code, fill = code), stat = "identity")+
   geom_errorbar(aes(ymin = estimate - std.error, ymax = estimate + std.error, x = code))+
   scale_fill_manual(name = "code",values = myColors, guide = "none")+
-  theme_bw(base_size = 16)+
+  theme_bw(base_size = 11)+
   ylab(yname3)+
   xlab("Bioregion")+
   geom_vline(xintercept = c(4.5, 6.5))+
@@ -279,7 +261,7 @@ gyield <- ggplot(fitted_yield)+
 
 gslope/gabs/gyield
 
-#ggplot2::ggsave("Output/Figures/full_barplot.jpg", width = 20, height = 15, unit = "cm", dpi = "print")
+ggsave("Output/Figures/full_barplot_redim.jpg", width = 20, height = 15, unit = "cm", dpi = "print")
 #ggsave("Output/paper_fig/full_barplot.png", height = 13, width = 13)
 
 

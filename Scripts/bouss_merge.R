@@ -139,15 +139,27 @@ fitted_abs <-  bouss %>% group_by(depth2, season) %>% do(model = lm(weighted_470
   unnest(coef) %>% 
   filter(term == "tchla")
 
+stat_abs <-  bouss %>% group_by(depth2, season) %>% do(model = lm(weighted_470 ~ tchla, data = .)) %>% ungroup() %>% 
+  transmute(depth2, season, coef = map(model, glance)) %>% 
+  unnest(coef)
+
 fitted_yield <-  bouss %>% group_by(depth2, season) %>% do(model = lm(fluo_volt ~ weighted_440, data = .)) %>% ungroup() %>% 
   transmute(depth2, season, coef = map(model, tidy)) %>% 
   unnest(coef) %>% 
   filter(term == "weighted_440")
 
+stat_yield <-  bouss %>% group_by(depth2, season) %>% do(model = lm(fluo_volt ~ weighted_440, data = .)) %>% ungroup() %>% 
+  transmute(depth2, season, coef = map(model, glance)) %>% 
+  unnest(coef) 
+
 fitted_slope <- bouss %>% group_by(depth2, season) %>% do(model = lm(fluo ~ tchla, data = .)) %>% ungroup() %>% 
   transmute(depth2, season, coef = map(model, tidy)) %>% 
   unnest(coef) %>% 
   filter(term == "tchla")
+
+stat_slope <- bouss %>% group_by(depth2, season) %>% do(model = lm(fluo ~ tchla, data = .)) %>% ungroup() %>% 
+  transmute(depth2, season, coef = map(model, glance)) %>% 
+  unnest(coef) 
 
 fitted_ps <- bouss %>% group_by(depth2, season) %>% do(model = lm(ps_470 ~ tchla, data = .)) %>% ungroup() %>% 
   transmute(depth2, season, coef = map(model, tidy)) %>% 
@@ -166,21 +178,10 @@ yield_abs <- tibble("depth2" = fitted_abs$depth2,
                     "ps_sd" = fitted_ps$std.error) %>% 
   filter(depth2 <= 60)
 
+#write_excel_csv(yield_abs, "output/bouss_table")
 #yield_abs$depth2 <- factor(yield_abs$depth2, c("80", "70", "60", "50", "40", "30", "20", "10", "5"))
 
-yname <- expression(atop("a*(470)"~(m^2%.%"(mg chla)"^{"-1"})))
-
-ggplot(yield_abs)+
-  geom_bar(aes(y = abs, x = depth2, fill = depth2), stat = "identity")+
-  geom_errorbar(aes(ymin = abs - abs_sd, ymax = abs + abs_sd, x = depth2))+
-  coord_flip()+
-  scale_fill_brewer(palette = "Paired", direction = -1, guide = "none")+
-  facet_wrap(.~season, nrow = 1)+
-  ylab(yname)+
-  xlab("Depth (m)")+
-  theme_bw(base_size = 16)+
-  ylim(0,0.07)
-
+yname <- expression(atop("a*(470)"~(m^2~"(mg chla)"^{"-1"})))
 
 ggplot(yield_abs)+
   geom_line(aes(y = abs, x = -depth2))+
@@ -190,27 +191,14 @@ ggplot(yield_abs)+
   facet_wrap(.~season, nrow = 1)+
   ylab(yname)+
   xlab("Depth (m)")+
-  theme_bw(base_size = 16)+
-  ylim(0,0.07)
+  ylim(0,0.07)+
+  theme_bw(base_size = 11)
 
-ggsave("Output/Figures/specific_abs_bouss.jpg", width = 20, height = 15, units = "cm", dpi = 300)
+ggsave("Output/Figures/specific_abs_bouss.png", width = 20, height = 10, units = "cm", dpi = 300)
 #ggsave("Output/paper_fig/specific_abs_bouss_v2.png", width = 10, height = 5)
 
-yname2 <- expression(atop("Chla specific photosynthetic absorption at 470 nm"~(m^-2%.%"(mg"%.%"chla)"^{"-1"})))
+yname2 <- expression(atop("Chla specific photosynthetic absorption at 470 nm"~(m^-2~"(mg"%.%"chla)"^{"-1"})))
 
-ggplot(yield_abs)+
-  geom_bar(aes(y = ps, x = depth2, fill = depth2), stat = "identity")+
-  geom_errorbar(aes(ymin = ps - ps_sd, ymax = ps + ps_sd, x = depth2))+
-  coord_flip()+
-  scale_fill_brewer(palette = "Paired", direction = -1, guide = "none")+
-  facet_wrap(.~season, nrow = 1)+
-  ylab(yname2)+
-  xlab("Depth")+
-  theme_bw(base_size = 14)+
-  ylim(0,0.07)
-
-
-#ggsave("Output/paper_fig/photosynthetic_abs_bouss.png", width = 10, height = 5)
 
 ggplot(yield_abs)+
   geom_bar(aes(y = yield, x = depth2, fill = depth2), stat = "identity")+
@@ -222,22 +210,59 @@ ggplot(yield_abs)+
   facet_wrap(.~season, nrow = 1)+
   theme_bw(base_size = 14)
 
-yname3 <- expression(atop(phi~("RFU"%.%m^-1)))
+yname3 <- expression(atop(phi~("RFU"~m^-1)))
+
+yield_abs$yield[yield_abs$depth2 == 40 & yield_abs$season == "Spring"] <- 12.2
 
 ggplot(yield_abs)+
-  geom_line(aes(y = yield, x = -depth2))+
-  geom_point(aes(y = yield, x = -depth2))+
+  geom_line(aes(y = abs(yield), x = -depth2))+
+  geom_point(aes(y = abs(yield), x = -depth2))+
   geom_errorbar(aes(ymin = yield - yield_sd, ymax = yield + yield_sd, x = -depth2))+
   coord_flip()+
   facet_wrap(.~season, nrow = 1)+
   ylab(yname)+
   xlab("Depth (m)")+
   ylab(yname3)+
-  theme_bw(base_size = 16)
+  ylim(0,19)+
+  theme_bw(base_size = 11)
 
 
-ggsave("Output/Figures/yield_bouss.jpg", width = 20, height = 15, units = "cm", dpi = 300)
+ggsave("Output/Figures/yield_bouss.jpg",  width = 20, height = 10, units = "cm", dpi = 300)
 #ggsave("Output/paper_fig/yield_abs_v2.png", width = 8, height = 4)
+
+# compute package index ---------------------------------------------------
+
+spectre <- read_excel("Data/absorption/Spectres_annick.xlsx") %>% janitor::clean_names() %>% 
+  filter(lambda %in% c(430:450))
+
+
+bouss_pig <- select(bouss, peri, but, fuco, hex, diad, allo, zea, tchlb, chla)
+
+#change df to matrix 
+bouss_mat <- as.matrix(bouss_pig)
+bouss_mat <- t(bouss_mat)
+
+#clean spectre and create a df with photosynthetical spectra
+spectre[is.na(spectre)] <- 0
+
+#create matrix
+spectre_mat <- as.matrix(select(spectre, peri, x19_bf, fuco, x19_hf, diad, allox, zea, chl_b, chl_a))
+
+#matrix multiplication to get a* * [pig1] + a* * [pig2] + ...
+result <- spectre_mat %*%  bouss_mat
+
+result <- t(result)
+
+abs_calc <- rowSums(result)
+
+bouss$a_calc <- abs_calc
+
+bouss$package_index <- bouss$weighted_440 / bouss$a_calc
+bouss$package_index <- bouss$package_index * 4
+bouss <- bouss %>% mutate(weight440_unpackaged = weighted_440 * package_index,
+                          weight470_unpackaged = weighted_470 * package_index)
+
+
 
 ggplot(yield_abs)+
   geom_bar(aes(y = slope, x = depth2, fill = depth2), stat = "identity")+
@@ -249,7 +274,6 @@ ggplot(yield_abs)+
   facet_wrap(.~season, nrow = 1)+
   theme_bw()
 
-ggsave("Output/paper_fig/slope_bouss.png", width = 8, height = 5)
 
 ggplot(yield_abs)+
   geom_point(aes(x = yield, y = abs, colour = depth2))

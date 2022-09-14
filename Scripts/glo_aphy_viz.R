@@ -108,12 +108,16 @@ fitted_models <-  lov_afc %>% group_by(code) %>% do(model = lm(unquench_440 ~ t_
   mutate(lambda = 440,
          slope = (estimate - mean(estimate)) / sd(estimate))
 
-fitted_models_470 <-  lov_afc %>% group_by(code) %>% do(model = lm(unquench_470 ~ t_chla + 0, data = .)) %>% ungroup() %>% 
+fitted_models_470 <-  lov_afc %>% group_by(code) %>% do(model = lm(weighted_470 ~ t_chla + 0, data = .)) %>% ungroup() %>% 
   transmute(code, coef = map(model, tidy)) %>% 
   unnest(coef) %>% 
   filter(term == "t_chla") %>% 
   mutate(lambda = 470,
          slope = (estimate - mean(estimate)) / sd(estimate))
+
+stat_models_470 <-  lov_afc %>% group_by(code) %>% do(model = lm(weighted_470 ~ t_chla + 0, data = .)) %>% ungroup() %>% 
+  transmute(code, coef = map(model, glance)) %>% 
+  unnest(coef)
 
 fitted_ps_470 <-  lov_afc %>% group_by(code) %>% filter(!is.na(ps_470)) %>% do(model = lm(ps_470 ~ t_chla + 0, data = .)) %>% ungroup() %>% 
   transmute(code, coef = map(model, tidy)) %>% 
@@ -173,7 +177,7 @@ gmap <- ggplot(lov_map)+
   scale_fill_manual(values = mycolors)+
   theme_bw(base_size = 16)
 
-yname <- expression(atop("a*(470)",~(m^2%.%"(mg"%.%"chla)"^{"-1"})))
+yname <- expression(atop("a*(470)",~(m^2~"(mg"~"chla)"^{"-1"})))
 
 fitted_models_470 <- fitted_models_470 %>% mutate(biome = case_when(code == "SANT" ~ "Polar",
                                                                     code == "BENG" ~ "Coastal",
@@ -202,14 +206,14 @@ names(myColors) <- c("SANT", "ANTA", "MEDI", "SSTC", "NASE", "NADR", "NATR", "IS
 fitted_models_470 <- filter(fitted_models_470, biome != "Coastal")
 
 fitted_models_470$code <- factor(fitted_models_470$code, levels = c("SANT", "ANTA", "MEDI", "SSTC", "NASE", "NADR", "NATR", "ISSG", "SPSG", "WARM", "PEQD"))
-gmap <- ggplot(lov_map)+
-  geom_point(aes(x = lon, y = lat, fill = code), size = 3, shape = 21)+
+gmap <- ggplot(filter(lov_map, code %in% fitted_models_470$code))+
   geom_polygon(data = map_vec, aes(x = long, y = lat, group = group))+
+  geom_point(aes(x = lon, y = lat, fill = code), size = 2, shape = 21)+
   coord_quickmap()+
   xlab("Longitude (°E)")+
   ylab("Latitude (°N)")+
-  scale_fill_manual(values = myColors)+
-  theme_bw(base_size = 16)
+  scale_fill_manual(values = myColors, name = "Code")+
+  theme_bw(base_size = 11)
 
 
 gmap/
@@ -219,13 +223,17 @@ gmap/
   ylab(yname)+
   xlab('Bioregion')+
   scale_fill_manual(values = myColors, guide = "none")+
-  theme_bw(base_size = 16)+
+  theme_bw(base_size = 11)+
   theme(axis.text.x=element_text(angle=45, hjust=1))+
   plot_layout(guide = "collect", widths = 30)+
   geom_vline(xintercept = c(2.5, 6.5)) +
-  annotate(geom = 'text', x = 1.5, y = 0.06, label = 'Polar') +
-  annotate(geom = 'text', x = 4.5, y = 0.06, label = 'Temperate') +
-  annotate(geom = 'text', x = 9, y = 0.06, label = 'Subtropical')
+  annotate(geom = 'text', x = 1.5, y = 0.08, label = 'Polar') +
+  annotate(geom = 'text', x = 4.5, y = 0.08, label = 'Temperate') +
+  annotate(geom = 'text', x = 9, y = 0.08, label = 'Subtropical')+
+  plot_layout(guide = "collect", height = c(1,1), nrow = 2)
+
+
+ggsave("Output/Figures/fig_3_abs_newdim.jpg", width = 20, height = 13, unit = "cm", dpi = "print")
 
 ggsave("Output/Figures/fig_3_abs.jpg", width = 20, height = 15, unit = "cm", dpi = "print")
 
